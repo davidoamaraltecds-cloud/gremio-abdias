@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grêmio EEEP Manuel Abdias</title>
+    <title>Grêmio Abdias em ação - EEEPMAE</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -33,6 +33,7 @@
         .logo-escola {
             max-width: 120px; /* Ajusta o tamanho da logo */
             margin-bottom: 1rem;
+            border-radius: 50%;
         }
 
         /* --- SEÇÃO DE IMPORTÂNCIA --- */
@@ -135,8 +136,8 @@
 <body>
 
 <header>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNqvc-LvATdU-EIvx_JtINh92cCEpWr8tMyg&s" alt="Logo EEEP" class="logo-escola">
-    <h1>Conecta Grêmio</h1>
+    <img src="gremio-logo.jpeg" alt="Logo EEEP" class="logo-escola">
+    <h1>Conecta Abdias em Ação</h1>
     <p>EEEP Manuel Abdias Evangelista</p>
 </header>
 
@@ -148,13 +149,13 @@
             <p>Acreditamos que uma escola melhor se constrói com a participação de todos. Suas sugestões, críticas e elogios chegam diretamente à nossa diretoria para que possamos transformar ideias em ações reais!</p>
         </div>
         <div class="info-image">
-            <img src="gremioepmae.jpg" alt="Membros do Grêmio">
+            <img src="gremioepmae.jpeg" alt="Membros do Grêmio">
         </div>
     </section>
 
     <div class="container-form">
         <div class="card-form">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxhAoqp6DbCzptKj3WVjBsR8i9NZbr9mfeOw&s" alt="Logo Escola" class="logo-interna">
+            <img src="gremio-logo-semfundo.png" alt="Logo Escola" class="logo-interna">
             
             <h3 style="text-align:center; color: var(--verde-escuro);">Mande sua Ideia</h3>
             
@@ -200,6 +201,56 @@
     <p>&copy; 2026 Grêmio Estudantil - EEEP Manuel Abdias Evangelista</p>
     <p><small>Transformando nossa escola juntos!</small></p>
 </footer>
+<script>
+    // 1. LISTA COMPLETA DE PALAVRAS BLOQUEADAS
+    const palavrasProibidas = [
+        "droga", "drogas", "porra", "puta", "puto", "merda", "desgraça", 
+        "gozar", "gozei", "gozo", "transar", "transei", "transa", 
+        "transando", "gozando", "cacete", "caceta", "puta que pariu", 
+        "caralho", "orgia", "suruba", "matar", "matando", "matei", 
+        "matou", "roubar", "roubei", "roubando", "roubou", "dr0g4", "drog4", "dr0ga", "vai se fuder"
+    ];
 
+    const form = document.querySelector('form');
+    
+    form.onsubmit = async (e) => {
+        e.preventDefault(); // Impede o envio padrão para a tela branca
+
+        // Captura o texto da sugestão e transforma tudo em minúsculo para comparar com a lista
+        const textoSugestao = form.querySelector('textarea[name="ideia"]').value.toLowerCase();
+
+        // 2. VERIFICAÇÃO: Checa se o texto contém alguma das palavras proibidas
+        const contemPalavraInadequada = palavrasProibidas.some(palavra => textoSugestao.includes(palavra));
+
+        if (contemPalavraInadequada) {
+            // Mensagem educativa e firme caso encontre termos proibidos
+            alert('Aviso: Sua sugestão contém termos que violam as diretrizes de convivência e respeito da EEEP Manoel Abdias Evangelista. Por favor, reformule sua ideia utilizando uma linguagem adequada.');
+            return; // Bloqueia o envio e encerra aqui
+        }
+
+        // 3. PROCESSO DE ENVIO (Só executa se passar no filtro acima)
+        const btn = form.querySelector('button');
+        btn.innerText = "Enviando...";
+        btn.disabled = true;
+
+        const formData = new FormData(form);
+        
+        try {
+            await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' // Configuração necessária para o Google Script
+            });
+            
+            alert('Sucesso! Sua ideia foi enviada de forma segura ao Grêmio.');
+            form.reset(); // Limpa o formulário para a próxima sugestão
+        } catch (error) {
+            alert('Ops! Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.');
+        } finally {
+            btn.innerText = "Enviar agora";
+            btn.disabled = false;
+        }
+    };
+</script>
 </body>
 </html>
